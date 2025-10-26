@@ -11,10 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Component
 public class JwtUtil {
 
-    // Generate a secure key for HS512
+
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
-    private final long jwtExpirationMs = 86400000; // 1 day
+    private final long jwtExpirationMs = 86400000;
 
     public String generateToken(Authentication authentication) {
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
@@ -23,7 +23,7 @@ public class JwtUtil {
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(key)  // use secure key
+                .signWith(key)
                 .compact();
     }
 

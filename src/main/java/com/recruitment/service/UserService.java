@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public User signup(SignupRequest request) {
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
@@ -26,5 +29,21 @@ public class UserService {
         user.setProfileHeadline(request.getProfileHeadline());
         user.setUserType(request.getUserType());
         return userRepository.save(user);
+    }
+
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
